@@ -8,13 +8,12 @@ import dagger.hilt.android.HiltAndroidApp
 class Application : android.app.Application() {
     override fun onCreate() {
         super.onCreate()
-
-        FirebaseMessaging.getInstance().token.addOnCompleteListener { task->
-            if(!task.isSuccessful){
+        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+            if (!task.isSuccessful) {
                 return@addOnCompleteListener
             }
             val token = task.result
-            Log.d("TAG","Token $token")
+            Log.d("TAG", "Token $token")
         }
     }
 }
