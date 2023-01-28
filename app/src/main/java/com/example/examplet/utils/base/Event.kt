@@ -1,0 +1,6 @@
+package com.example.examplet.utils.base
+
+/**
+ * Базовый класс для событий
+ */
+abstract class Event
