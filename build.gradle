@@ -6,6 +6,9 @@ buildscript {
         okhttp_version = '4.10.0'
         hilt_version = '2.44'
     }
+    dependencies {
+        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.9.2'
+    }
 }// Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {
     id 'com.android.application' version '7.3.1' apply false

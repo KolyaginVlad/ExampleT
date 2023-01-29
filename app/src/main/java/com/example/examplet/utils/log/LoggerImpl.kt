@@ -1,15 +1,16 @@
 package com.example.examplet.utils.log
 
 import android.util.Log
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import javax.inject.Inject
 
 class LoggerImpl @Inject constructor(
-
+    private val crashlytics: FirebaseCrashlytics
 ) : Logger {
 
     override fun error(throwable: Throwable) {
         throwable.printStackTrace()
-        //TODO Добавить отправку в Crashlytics
+        crashlytics.recordException(throwable)
     }
 
     override fun error(message: String) {
