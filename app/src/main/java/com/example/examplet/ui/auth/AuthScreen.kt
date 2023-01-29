@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.examplet.R
+import com.example.examplet.ui.destinations.ListScreenDestination
 import com.example.examplet.ui.theme.ExampleTTheme
 import com.example.examplet.ui.views.Spacer
 import com.ramcosta.composedestinations.annotation.Destination
@@ -45,6 +46,7 @@ fun AuthScreen(
                 is AuthScreenEvent.ShowToast -> Toast.makeText(
                     context, it.text, Toast.LENGTH_LONG
                 ).show()
+                is AuthScreenEvent.GoToList -> navigator.navigate(ListScreenDestination.route)
             }
         }
     }
