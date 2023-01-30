@@ -35,7 +35,7 @@ class AuthViewModel @Inject constructor(
                 sendEvent(AuthScreenEvent.ShowToast(it.message ?: "Something went wrong"))
             }, onSuccess = {
                 logger.event(AuthAnalyticsEvent(true))
-                sendEvent(AuthScreenEvent.ShowToast("All is Ok"))
+                sendEvent(AuthScreenEvent.GoToList)
             }
         )
         updateState {

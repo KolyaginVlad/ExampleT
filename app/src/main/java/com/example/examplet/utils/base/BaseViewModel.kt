@@ -58,6 +58,14 @@ abstract class BaseViewModel<STATE : State, EVENT : Event>(initialState: STATE) 
         _event.emit(event)
 
     /**
+     * Отправить событие на экран и получить результат отправки
+     * @param event Событие для экрана
+     * @return Отправлено ли значение?
+     */
+    fun trySendEvent(event: EVENT) =
+        _event.tryEmit(event)
+
+    /**
      * Запуск корутины в скопе viewModel с обработкой ошибок и настроенным контекстом выполнения
      * @param block Код корутины
      * @see handleException
