@@ -1,9 +1,9 @@
 package com.example.examplet.data.di
 
 import android.content.Context
-import com.example.examplet.analytics.FirebaseAnalytics
 import com.example.examplet.data.repositories.ApiRepositoryImpl
 import com.example.examplet.domain.repositories.ApiRepository
+import com.google.firebase.analytics.FirebaseAnalytics
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -23,12 +23,10 @@ interface DataModule {
 
 @Module
 @InstallIn(SingletonComponent::class)
-class AnalyticsModule{
+class AnalyticsModule {
 
     @Provides
-    fun bindAnalytics(
-        @ApplicationContext appContext: Context,
-    ): FirebaseAnalytics {
-        return FirebaseAnalytics(appContext)
+    fun provideFirebaseAnalytics(@ApplicationContext context: Context): FirebaseAnalytics {
+        return FirebaseAnalytics.getInstance(context)
     }
 }

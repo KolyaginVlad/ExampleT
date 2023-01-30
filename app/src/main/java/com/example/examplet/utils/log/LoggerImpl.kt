@@ -1,11 +1,12 @@
 package com.example.examplet.utils.log
 
 import android.util.Log
-import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.google.firebase.analytics.FirebaseAnalytics
 import javax.inject.Inject
 
 class LoggerImpl @Inject constructor(
-    private val crashlytics: FirebaseCrashlytics
+    private val analytics: FirebaseAnalytics,
+    private val crashlytics: FirebaseCrashlytics,
 ) : Logger {
 
     override fun error(throwable: Throwable) {
@@ -26,11 +27,20 @@ class LoggerImpl @Inject constructor(
     }
 
     override fun event(
-        event: String,
-        vararg args: String
+        event: AnalyticsEvent,
     ) {
-        info("Sending event $event with args $args")
-        //TODO Отправка в Analytics
+        val bundle = Bundle().apply {
+            event.arguments.forEach { entry ->
+                val value = entry.value
+                if (value is Serializable?) {
+                    putSerializable(entry.key, value)
+                } else {
+                    putString(entry.key, value.toString())
+                }
+            }
+        }
+        analytics.logEvent(event.name, bundle)
+        info("Sending event ${event.name} with args ${event.arguments}")
     }
 
     companion object {

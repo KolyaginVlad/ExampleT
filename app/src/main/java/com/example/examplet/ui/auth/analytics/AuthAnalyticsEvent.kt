@@ -1,6 +1,6 @@
 package com.example.examplet.ui.auth.analytics
 
-import com.example.examplet.analytics.AnalyticsEvent
+import com.example.examplet.utils.analytics.AnalyticsEvent
 
 data class AuthAnalyticsEvent(
     val isSuccessful: Boolean,
