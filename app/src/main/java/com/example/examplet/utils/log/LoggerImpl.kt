@@ -1,7 +1,11 @@
 package com.example.examplet.utils.log
 
+import android.os.Bundle
 import android.util.Log
+import com.example.examplet.utils.analytics.AnalyticsEvent
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.crashlytics.FirebaseCrashlytics
+import java.io.Serializable
 import javax.inject.Inject
 
 class LoggerImpl @Inject constructor(
