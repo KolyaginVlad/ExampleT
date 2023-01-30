@@ -1,4 +1,4 @@
-package com.example.examplet.notification
+package com.example.examplet.ui.services
 
 import com.google.firebase.messaging.FirebaseMessagingService
 

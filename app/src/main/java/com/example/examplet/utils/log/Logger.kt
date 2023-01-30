@@ -1,5 +1,7 @@
 package com.example.examplet.utils.log
 
+import com.example.examplet.utils.analytics.AnalyticsEvent
+
 
 interface Logger {
 
@@ -12,7 +14,6 @@ interface Logger {
     fun info(message: String)
 
     fun event(
-        event: String,
-        vararg args: String
+        event: AnalyticsEvent
     )
 }

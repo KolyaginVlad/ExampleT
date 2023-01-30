@@ -1,4 +1,4 @@
-package com.example.examplet.analytics
+package com.example.examplet.utils.analytics
 
 interface AnalyticsEvent {
     /**
