@@ -4,16 +4,18 @@ import android.os.Bundle
 import android.util.Log
 import com.example.examplet.utils.analytics.AnalyticsEvent
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import java.io.Serializable
 import javax.inject.Inject
 
 class LoggerImpl @Inject constructor(
     private val analytics: FirebaseAnalytics,
+    private val crashlytics: FirebaseCrashlytics,
 ) : Logger {
 
     override fun error(throwable: Throwable) {
         throwable.printStackTrace()
-        //TODO Добавить отправку в Crashlytics
+        crashlytics.recordException(throwable)
     }
 
     override fun error(message: String) {
@@ -44,6 +46,7 @@ class LoggerImpl @Inject constructor(
         analytics.logEvent(event.name, bundle)
         info("Sending event ${event.name} with args ${event.arguments}")
     }
+
     companion object {
         const val TAG = "ExampleT"
     }
