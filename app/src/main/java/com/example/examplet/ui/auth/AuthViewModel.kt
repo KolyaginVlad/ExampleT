@@ -1,7 +1,9 @@
 package com.example.examplet.ui.auth
 
+import com.example.examplet.utils.analytics.AnalyticsEvent
 import com.example.examplet.domain.models.UserCredentials
 import com.example.examplet.domain.repositories.ApiRepository
+import com.example.examplet.ui.auth.analytics.AuthAnalyticsEvent
 import com.example.examplet.utils.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -29,8 +31,10 @@ class AuthViewModel @Inject constructor(
         }
         apiRepository.login(UserCredentials(currentState.login, currentState.password)).fold(
             onFailure = {
+                logger.event(AuthAnalyticsEvent(false))
                 sendEvent(AuthScreenEvent.ShowToast(it.message ?: "Something went wrong"))
             }, onSuccess = {
+                logger.event(AuthAnalyticsEvent(true))
                 sendEvent(AuthScreenEvent.GoToList)
             }
         )
