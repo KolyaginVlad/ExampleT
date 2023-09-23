@@ -5,12 +5,23 @@ import androidx.lifecycle.viewModelScope
 import com.example.examplet.utils.log.Logger
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.async
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.FlowCollector
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 /**
  * Базовая ViewModel
@@ -20,10 +31,10 @@ import javax.inject.Inject
  * @see State
  * @see Event
  */
-abstract class BaseViewModel<STATE : State, EVENT : Event>(initialState: STATE) : ViewModel() {
-
-    @Inject
-    lateinit var logger: Logger
+abstract class BaseViewModel<STATE : State, EVENT : Event>(
+    initialState: STATE,
+    val logger: Logger
+) : ViewModel() {
 
     private val _screenState = MutableStateFlow(initialState)
 
@@ -82,9 +93,13 @@ abstract class BaseViewModel<STATE : State, EVENT : Event>(initialState: STATE) 
      * @param block Код корутины
      * @see handleException
      */
-    protected fun asyncViewModelScope(block: suspend CoroutineScope.() -> Unit) =
+    protected fun <T> asyncViewModelScope(
+        start: CoroutineStart = CoroutineStart.DEFAULT,
+        block: suspend CoroutineScope.() -> T
+    ) =
         viewModelScope.async(
             context = SupervisorJob() + Dispatchers.IO + exceptionHandler,
+            start = start,
             block = block
         )
 
@@ -114,7 +129,9 @@ abstract class BaseViewModel<STATE : State, EVENT : Event>(initialState: STATE) 
         this.onStart(onStart)
             .onEach(onEach)
             .onCompletion(onComplete)
-            .flowOn(SupervisorJob() + Dispatchers.IO + exceptionHandler)
+            .flowOn(Dispatchers.Main + exceptionHandler)
             .launchIn(viewModelScope)
 
+    protected fun <T> Result<T>.handleExceptionOnFailure() =
+        onFailure(this@BaseViewModel::handleException)
 }
