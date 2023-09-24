@@ -1,6 +1,7 @@
 package com.example.examplet.ui.list
 
 import com.example.examplet.domain.repositories.ApiRepository
+import com.example.examplet.utils.base.BaseDispatchers
 import com.example.examplet.utils.base.BaseViewModel
 import com.example.examplet.utils.log.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -11,8 +12,9 @@ import javax.inject.Inject
 @HiltViewModel
 class ListViewModel @Inject constructor(
     logger: Logger,
+    baseDispatchers: BaseDispatchers,
     private val apiRepository: ApiRepository
-) : BaseViewModel<ListScreenState, ListScreenEvent>(ListScreenState(), logger) {
+) : BaseViewModel<ListScreenState, ListScreenEvent>(ListScreenState(), logger, baseDispatchers) {
 
     init {
         launchViewModelScope {

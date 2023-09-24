@@ -28,12 +28,15 @@ import kotlinx.coroutines.launch
  *
  * Принимает типы состояния экрана и sealed class для событий экрана.
  * @property initialState Начальное состояние экрана
+ * @property logger Логгер
+ * @property dispatchers CoroutineDispatchers для тестирования корутин
  * @see State
  * @see Event
  */
 abstract class BaseViewModel<STATE : State, EVENT : Event>(
     initialState: STATE,
-    val logger: Logger
+    val logger: Logger,
+    protected val dispatchers: BaseDispatchers
 ) : ViewModel() {
 
     private val _screenState = MutableStateFlow(initialState)
@@ -141,7 +144,7 @@ abstract class BaseViewModel<STATE : State, EVENT : Event>(
      */
     protected fun launchViewModelScope(block: suspend CoroutineScope.() -> Unit) =
         viewModelScope.launch(
-            context = SupervisorJob() + Dispatchers.IO + exceptionHandler,
+            context = SupervisorJob() + dispatchers.io + exceptionHandler,
             block = block
         )
 
@@ -156,7 +159,7 @@ abstract class BaseViewModel<STATE : State, EVENT : Event>(
         block: suspend CoroutineScope.() -> T
     ) =
         viewModelScope.async(
-            context = SupervisorJob() + Dispatchers.IO + exceptionHandler,
+            context = SupervisorJob() + dispatchers.io + exceptionHandler,
             start = start,
             block = block
         )
@@ -199,7 +202,7 @@ abstract class BaseViewModel<STATE : State, EVENT : Event>(
         this.onStart(onStart)
             .onEach(onEach)
             .onCompletion(onComplete)
-            .flowOn(Dispatchers.Main + exceptionHandler)
+            .flowOn(dispatchers.main + exceptionHandler)
             .launchIn(viewModelScope)
 
     protected fun <T> Result<T>.handleExceptionOnFailure() =

@@ -3,6 +3,7 @@ package com.example.examplet.ui.auth
 import com.example.examplet.domain.models.UserCredentials
 import com.example.examplet.domain.repositories.ApiRepository
 import com.example.examplet.ui.auth.analytics.AuthAnalyticsEvent
+import com.example.examplet.utils.base.BaseDispatchers
 import com.example.examplet.utils.base.BaseViewModel
 import com.example.examplet.utils.log.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -11,8 +12,9 @@ import javax.inject.Inject
 @HiltViewModel
 class AuthViewModel @Inject constructor(
     logger: Logger,
+    baseDispatchers: BaseDispatchers,
     private val apiRepository: ApiRepository,
-) : BaseViewModel<AuthScreenState, AuthScreenEvent>(AuthScreenState(), logger) {
+) : BaseViewModel<AuthScreenState, AuthScreenEvent>(AuthScreenState(), logger, baseDispatchers) {
 
     fun onLoginChange(login: String) {
         updateState {

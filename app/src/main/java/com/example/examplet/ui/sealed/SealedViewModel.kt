@@ -1,5 +1,6 @@
 package com.example.examplet.ui.sealed
 
+import com.example.examplet.utils.base.BaseDispatchers
 import com.example.examplet.utils.base.BaseViewModel
 import com.example.examplet.utils.log.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -8,7 +9,8 @@ import javax.inject.Inject
 @HiltViewModel
 class SealedViewModel @Inject constructor(
     logger: Logger,
-) : BaseViewModel<SealedScreenState, SealedScreenEvent>(SealedScreenState.Init, logger) {
+    baseDispatchers: BaseDispatchers,
+) : BaseViewModel<SealedScreenState, SealedScreenEvent>(SealedScreenState.Init, logger, baseDispatchers) {
 
     fun someThing(text: String) {
         val firstText = withState(onErrorState = ::wrong, block = ::getFirst)
