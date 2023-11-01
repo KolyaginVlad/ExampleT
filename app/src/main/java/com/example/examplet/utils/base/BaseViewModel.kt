@@ -62,7 +62,7 @@ abstract class BaseViewModel<STATE : State, EVENT : Event>(
      * инстансом заданного
      * @param block Функция с текущим состоянием
      */
-    protected inline fun <reified CASTED : STATE, reified RESULT> withState(
+    protected inline fun <reified CASTED : STATE, reified RESULT> getWithState(
         onErrorState: (STATE) -> RESULT,
         block: (CASTED) -> RESULT
     ): RESULT {
@@ -80,7 +80,7 @@ abstract class BaseViewModel<STATE : State, EVENT : Event>(
      * @see IllegalScreenStateException
      * @see handleException
      */
-    protected inline fun <reified CASTED : STATE> withState(
+    protected inline fun <reified CASTED : STATE> runWithState(
         onErrorState: (STATE) -> Unit = {
             handleException(
                 IllegalScreenStateException("Wrong state $it. Expected ${CASTED::class.java.name}")
@@ -101,10 +101,9 @@ abstract class BaseViewModel<STATE : State, EVENT : Event>(
      * @see updateState
      * @see handleWrongState
      */
-    @Suppress("UNCHECKED_CAST")
-    protected fun <CASTED : STATE> updateState(
-        onErrorState: (STATE) -> STATE = ::handleWrongState,
-        block: (CASTED) -> STATE
+    protected inline fun <reified CASTED : STATE> updateState(
+        noinline onErrorState: (STATE) -> STATE = ::handleWrongState,
+        noinline block: (CASTED) -> STATE,
     ) {
         updateState {
             (it as? CASTED)?.let(block) ?: onErrorState(it)
