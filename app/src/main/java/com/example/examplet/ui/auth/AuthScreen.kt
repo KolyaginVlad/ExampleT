@@ -27,6 +27,8 @@ import com.example.examplet.R
 import com.example.examplet.ui.destinations.ListScreenDestination
 import com.example.examplet.ui.theme.ExampleTTheme
 import com.example.examplet.ui.views.Spacer
+import com.example.examplet.utils.base.subscribeEvents
+import com.example.examplet.utils.base.subscribeScreenState
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -38,16 +40,14 @@ fun AuthScreen(
     navigator: DestinationsNavigator,
     viewModel: AuthViewModel = hiltViewModel()
 ) {
-    val state by viewModel.screenState.collectAsStateWithLifecycle()
+    val state by viewModel.subscribeScreenState()
     val context = LocalContext.current
-    LaunchedEffect(Unit) {
-        viewModel.event.collect {
-            when (it) {
-                is AuthScreenEvent.ShowToast -> Toast.makeText(
-                    context, it.text, Toast.LENGTH_LONG
-                ).show()
-                is AuthScreenEvent.GoToList -> navigator.navigate(ListScreenDestination.route)
-            }
+    viewModel.subscribeEvents {
+        when (it) {
+            is AuthScreenEvent.ShowToast -> Toast.makeText(
+                context, it.text, Toast.LENGTH_LONG
+            ).show()
+            is AuthScreenEvent.GoToList -> navigator.navigate(ListScreenDestination.route)
         }
     }
     AuthScreenContent(

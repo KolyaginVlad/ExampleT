@@ -10,4 +10,6 @@ interface ApiRepository {
     suspend fun loadListOfDogs(): List<Dog>
 
     suspend fun loadListOfCats(): List<Cat>
+
+    fun getActualToken(): Result<String>
 }

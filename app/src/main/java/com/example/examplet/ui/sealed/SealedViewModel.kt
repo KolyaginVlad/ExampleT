@@ -11,8 +11,8 @@ class SealedViewModel @Inject constructor(
 ) : BaseViewModel<SealedScreenState, SealedScreenEvent>(SealedScreenState.Init, logger) {
 
     fun someThing(text: String) {
-        val firstText = withState(onErrorState = ::wrong, block = ::getFirst)
-        withState<SealedScreenState.StateFirst> {
+        val firstText = runWithState(onErrorState = ::wrong, block = ::getFirst)
+        runWithState<SealedScreenState.StateFirst> {
             logger.debug(it.toString())
         }
         updateState<SealedScreenState.StateFirst> {
