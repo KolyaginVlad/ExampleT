@@ -11,13 +11,14 @@ import okhttp3.Response
 import okhttp3.ResponseBody.Companion.toResponseBody
 import java.net.HttpURLConnection
 import javax.inject.Inject
+import javax.inject.Provider
 
 /**
  * Перехватчик, добавляющий Bearer токен для методов, отмеченных @Authorized
  * @see Authorized
  */
 class AuthInterceptor @Inject constructor(
-    private val authRepository: ApiRepository,
+    private val authRepositoryProvider: Provider<ApiRepository>,
 ) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         if (chain.hasAnnotation(Authorized::class.java)) {
@@ -25,7 +26,7 @@ class AuthInterceptor @Inject constructor(
 
             var tryToRefreshToken = true
             while (true) {
-                val token = authRepository.getActualToken().getOrElse { t ->
+                val token = authRepositoryProvider.get().getActualToken().getOrElse { t ->
                     return createFailedResponseFromRequest(request, t.message)
                 }
 

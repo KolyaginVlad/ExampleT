@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import com.example.examplet.BuildConfig
 import com.example.examplet.data.AuthApi
+import com.example.examplet.data.api.AuthInterceptor
 import com.example.examplet.data.api.ResultCallAdapterFactory
 import com.example.examplet.data.repositories.ApiRepositoryImpl
 import com.example.examplet.domain.repositories.ApiRepository
@@ -66,7 +67,7 @@ interface DataModule {
 
         @Provides
         @Singleton
-        fun provideOkHttpClient(): OkHttpClient {
+        fun provideOkHttpClient(authInterceptor: AuthInterceptor): OkHttpClient {
             return OkHttpClient.Builder()
                 .apply {
                     if (BuildConfig.DEBUG) {
@@ -77,6 +78,7 @@ interface DataModule {
                         )
                     }
                 }
+                .addInterceptor(authInterceptor)
                 .callTimeout(TIMEOUT_VALUE, TimeUnit.SECONDS)
                 .connectTimeout(TIMEOUT_VALUE, TimeUnit.SECONDS)
                 .build()
