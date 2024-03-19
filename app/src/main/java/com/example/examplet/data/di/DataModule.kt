@@ -69,6 +69,7 @@ interface DataModule {
         @Singleton
         fun provideOkHttpClient(authInterceptor: AuthInterceptor): OkHttpClient {
             return OkHttpClient.Builder()
+                .addInterceptor(authInterceptor)
                 .apply {
                     if (BuildConfig.DEBUG) {
                         addInterceptor(
