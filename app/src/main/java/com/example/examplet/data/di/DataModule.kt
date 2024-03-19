@@ -79,7 +79,6 @@ interface DataModule {
                         )
                     }
                 }
-                .addInterceptor(authInterceptor)
                 .callTimeout(TIMEOUT_VALUE, TimeUnit.SECONDS)
                 .connectTimeout(TIMEOUT_VALUE, TimeUnit.SECONDS)
                 .build()
